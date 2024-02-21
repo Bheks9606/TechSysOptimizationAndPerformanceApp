@@ -6,6 +6,7 @@ The TechSys Optimization and Performance App is a C# console application designe
 This README provides an overview of the code structure, optimization techniques, and security considerations.
 
 #Table of Contents
+
 1. Code Structure
 2. Optimization
 3. Security
@@ -14,6 +15,7 @@ This README provides an overview of the code structure, optimization techniques,
 6. License
    
 #Code Structure
+
 The application is organized into the following components:
 
 1. DataSimulation: The main class responsible for generating employee data.
@@ -21,6 +23,7 @@ The application is organized into the following components:
 3. Models: Contains the Employee model.
 
 #Optimization 
+
 1. Batch Processing
 Utilizes LINQ for batch processing to improve readability and maintainability.
 
@@ -34,6 +37,7 @@ Code refactoring for improved readability and maintainability.
 Constants and configurations are stored as readonly variables.
 
 #Security 
+
 1. Random Number Generation
 Uses static random class for thread-safe random number generation.
 
@@ -44,6 +48,7 @@ No sensitive data is stored or processed in an insecure manner.
 Input data for generating random names and job titles is validated against predefined arrays.
 
 #Usage 
+
 Install the required dependencies.
 
 1. Copy code
@@ -52,8 +57,10 @@ Install the required dependencies.
 5. Run the application by pressing F5.
 
 #Contributing
+
 Feel free to contribute to the project by submitting issues, feature requests, or pull requests. Follow the Contributing Guidelines.
 
 #License 
+
 This project is licensed under the MIT License.
 
