@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using DataInterface.Utils;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,51 +11,67 @@ namespace TechSysOptimizationAndPerformanceApp.BusinessLogic
 {
     public class DataSimulation
     {
-        //a list to store employees data
-        List<Employee> employees = new List<Employee>();
+
+        List<Employee> employees = new List<Employee>();  //a list to store employees data
 
         //object that will be used to random the employees properties 
         private static Random random = new Random();
+        private readonly PopulateEmployeeInfo populateEmployeeInfo;
+
+        public DataSimulation(PopulateEmployeeInfo populateEmployeeInfo)
+        {
+            this.populateEmployeeInfo = populateEmployeeInfo;
+        }
 
         public List<Employee> GenerateEmployeeData()
         {
-            for (int i = 1; i <= 1000; i++)
-            {
-                employees.Add(new Employee 
-                {
-                    Id = i, 
-                    CompanyName =  "Techsys Digital",
-                    EmailAddress = $"{GenerateRandomFirstName()}@techsysdigital.com",
-                    FirstName = GenerateRandomFirstName(),
-                    LastName = GenerateRandomLastName(),
-                    Gender = (i % 2 == 0) ? "Male" : "Female",
-                    JobTitle = GenerateRandomJobTitle(),
-                    PhoneNumber = GenerateRandomPhoneNumber(),
-                    Salary = $"R{GenerateRandomSalary(random)}",
-                }
-                );
-            }
+            int totalEmployees = 1000;
+            int batchSize = 100;
 
-            return employees;
-
+            return Enumerable.Range(1, totalEmployees / batchSize)
+                             .SelectMany(_ => GenerateEmployeeBatch(batchSize))
+                             .ToList();
         }
 
-        #region MethodsToGenerateRandomData
-        private static string GenerateRandomFirstName()
+        private List<Employee> GenerateEmployeeBatch(int batchSize)
         {
-            string[] firstNames = { "Bheki", "Jane", "Sipho", "Bob", "Lwazi", "David", "Mandla", "Frank", "Tshegofatso", "Henry" };
+            var batch = new List<Employee>();
+
+            for (int i = 0; i < batchSize; i++)
+            {
+                int employeeId = employees.Count + i + 1;
+
+                batch.Add(new Employee
+                {
+                    Id = employeeId,
+                    CompanyName = "Techsys Digital",
+                    EmailAddress = $"{GenerateRandomFirstName(populateEmployeeInfo.FirstNames)}@techsysdigital.com",
+                    FirstName = GenerateRandomFirstName(populateEmployeeInfo.FirstNames),
+                    LastName = GenerateRandomLastName(populateEmployeeInfo.LastNames),
+                    Gender = (employeeId % 2 == 0) ? "Male" : "Female",
+                    JobTitle = GenerateRandomJobTitle(populateEmployeeInfo.JobTitles),
+                    PhoneNumber = GenerateRandomPhoneNumber(),
+                    Salary = $"R{GenerateRandomSalary(random)}",
+                });
+            }
+
+            return batch;
+        }
+
+
+        #region MethodsToGenerateRandomData
+        private static string GenerateRandomFirstName(string[] firstNames)
+        {
             return GenerateRandomName(firstNames);
         }
 
-        private static string GenerateRandomLastName()
+        private static string GenerateRandomLastName(string[] lastNames)
         {
-            string[] lastNames = { "Sangweni", "Smith", "Nkosi", "Dlamini", "Rupert", "Jackson", "Jones", "Anderson", "Tau", "Doe" };
             return GenerateRandomName(lastNames);
         }
 
-        private static string GenerateRandomJobTitle()
+        private static string GenerateRandomJobTitle(string[] jobTitles)
         {
-            string[] jobTitles = { "Software Engineer", "Doctor", "Chemical Engineer", "Lawyer", "Teacher", "Psychologist", "IT Recruiter", "Public Relations", "Sport Manager", "Chief Technology Officer" };
             return GenerateRandomName(jobTitles);
         }
 
@@ -70,7 +87,6 @@ namespace TechSysOptimizationAndPerformanceApp.BusinessLogic
 
         private static string GenerateRandomPhoneNumber()
         {
-            Random random = new Random();
             return $"+{27} {random.Next(100, 999)} {random.Next(100, 999)} {random.Next(100, 999)}";
         }
 
