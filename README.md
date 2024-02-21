@@ -1,6 +1,7 @@
 #TechSys Optimization and Performance App
 
 #Introduction
+
 The TechSys Optimization and Performance App is a C# console application designed for generating simulated employee data. 
 This README provides an overview of the code structure, optimization techniques, and security considerations.
 
